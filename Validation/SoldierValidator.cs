@@ -2,9 +2,4 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Validation
-{
-    internal class SoldierValidator
-    {
-    }
-}
+namespace IntelligencePipeline.Validation;

@@ -2,9 +2,4 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Storage
-{
-    internal class ReportRepository
-    {
-    }
-}
+namespace IntelligencePipeline.Storage;

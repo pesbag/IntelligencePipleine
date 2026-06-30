@@ -2,9 +2,4 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace reports
-{
-    internal class DroneReport
-    {
-    }
-}
+namespace IntelligencePipeline.Models.Reports

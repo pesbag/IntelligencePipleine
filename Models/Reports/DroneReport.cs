@@ -2,4 +2,4 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IntelligencePipeline.Validation;
+namespace IntelligencePipeline.Models.Reports
