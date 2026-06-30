@@ -1,0 +1,44 @@
+Enum Status {New, Validate,Validating,Rejected,InProgress,Completed};
+Enum Classification {Unclassified,Restricted,Secret,TopSecret};
+Enum SourceType {Drone,Soldier,Radar,Signal};
+Enum Priority {Low,Medium,High,Critial};
+enum Language {Hebrew,Aravic,English,Russian,Other}
+
+abstract class Report:
+protected string SourceType; SourceType.
+protected DateTime TimeStamp; should be in past.
+protected double Latitude;should be in range33.5000-29.5000
+protected double Longtitude;
+protected string Description;
+protected Report(string SourceType, DateTime TimeStamp,double Latitude,double Longtitude, string Description){}
+
+interface AutomaticFeild:
+int ReportId();
+string Status();
+string Priority();
+string Classification();
+int ReliablilityScore();
+string RejectionReason();
+protected
+
+Class Drone:
+Private int Altitude; 100-10,000.
+Private int ImageQuality;1-100.
+
+
+Class Soldier;
+Private string Soldiername:2-50.
+Private string SoldierId:7.
+Private string Unit:2-50.
+Private int ConfidencLevel:1-5.
+
+Class Radar:
+Private int Speed:0-2000.
+Private int Direction:0-360.
+Private int Distance:100-10,000.
+
+Class Signal:
+Private double Frequency:1.0-3000.
+Private string Content:5-1,000.
+Private string Language: enum Language.
+Private int SignalStrngth: 0-120.
