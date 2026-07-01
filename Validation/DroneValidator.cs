@@ -6,11 +6,11 @@ using System.Text;
 namespace IntelligencePipeline.Validation;
 class DroneValidator:BaseValidator
 {
-    public ValidationResult Validate(Report report)
+    protected override ValidationResult ValidateSpecificFields(Report report)
     {
         if (report is not DroneReport droneReport)
         {
-            return ValidationResult.Failure( "Error: this report is not Drone report");
+            return ValidationResult.Failure("Error: this report is not Drone report");
         }
         if (droneReport.Altitude < 100 || droneReport.Altitude > 10000)
         {

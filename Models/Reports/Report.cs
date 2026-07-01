@@ -33,12 +33,30 @@ abstract class Report
         get { return _latitude; }
         protected set { _latitude = value; }
     }
-    public string Description { get; protected set; }
-    public ReportStatus Status { get; protected set; }
-    public Priority Priority { get; set; }
-    public Classification Classification { get; set; }
-    public int ReliabilityScore { get; set; }
-    public string RejectionReason { get; set; }
+    public string Description {
+        get { return _description; }
+        protected set{ _description = value; }
+    }
+    public ReportStatus Status {
+        get { return _status; }
+        protected set { _status = value; }
+    }
+    public Priority Priority { 
+        get { return _priority; }
+        protected set { _priority = value; }
+    }
+    public Classification Classification {
+        get { return _classification; }
+        protected set { _classification = value; }
+    }
+    public int ReliabilityScore {
+        get { return _reliabilityScore; }
+        protected set { _reliabilityScore = value; }
+            }
+    public string RejectionReason {
+        get { return _rejectionReason; }
+        protected set { _rejectionReason = value; }
+    }
 
     protected Report(int reportId, DateTime timestamp, double latitude, double longitude, string description)
     {
