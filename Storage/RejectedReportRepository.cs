@@ -29,19 +29,19 @@ class RejectedReportRepository
         return _rejectedReports.Count;
     }
 
-    public List<Report> GetByReason(string reasonKeyword)
+    public List<Report>? GetByReason(string reasonKeyword)
     {
         List<Report> SearchKeyWord = new List<Report>();
         string findKeyword = $@"\b{reasonKeyword}\b";
 
         for (int i = 0; i < _rejectedReports.Count; i++)
         {
-            if (Regex.IsMatch(_rejectedReports[i].DescriptionRejectionReason, reasonKeyword, RegexOptions.IgnoreCase))
+            if (Regex.IsMatch(_rejectedReports[i].RejectionReason, reasonKeyword, RegexOptions.IgnoreCase))
             {
                 SearchKeyWord.Add(_rejectedReports[i]);
             }
         }
-        return SearchKeyWord;
+        return SearchKeyWord.Count>0? SearchKeyWord:null;
     }
 
 }

@@ -9,7 +9,7 @@ namespace IntelligencePipeline.Calculators
     {
         public Priority Calculate(Report report)
         {
-            //if (report == null) return Priority.Low;
+            if (report == null) return Priority.Low;
 
             RadarReport radarReport = report as RadarReport;
             SignalReport signalReport = report as SignalReport;

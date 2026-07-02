@@ -16,7 +16,7 @@ class ReportPipeline
 {
     private ReportRepository _validatedReports;
     private RejectedReportRepository _rejectedReports;
-    //private int _nextReportId;
+    private int _nextReportId;
 
     public ReportPipeline() {
         _validatedReports = new ReportRepository();

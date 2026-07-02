@@ -1,5 +1,6 @@
 ﻿using IntelligencePipeline.Models.Enums;
 using IntelligencePipeline.Models.Reports;
+using IntelligencePipeline.Storage;
 using System;
 using System.Collections.Generic;
 using System.Reflection.Metadata;
