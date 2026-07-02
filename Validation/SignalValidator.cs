@@ -12,7 +12,7 @@ namespace IntelligencePipeline.Validation
     {
         protected override ValidationResult ValidateSpecificFields(Report report)
         {
-            SignalReport signalReport = report as SignalReport;
+            SignalReport? signalReport = report as SignalReport;
             if (signalReport == null)
             {
                 return ValidationResult.Failure("Error: this report is not signal report");

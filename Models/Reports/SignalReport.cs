@@ -10,7 +10,7 @@ namespace IntelligencePipeline.Models.Reports;
 class SignalReport:Report
 {
     private double _frequency;
-    private string _content;
+    private string _content=string.Empty;
     private Language _language;
     private int _signalStrength;
     public double Frequency {

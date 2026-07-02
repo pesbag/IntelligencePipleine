@@ -11,10 +11,10 @@ namespace IntelligencePipeline.Calculators
         {
             if (report == null) return Priority.Low;
 
-            RadarReport radarReport = report as RadarReport;
-            SignalReport signalReport = report as SignalReport;
-            DroneReport droneReport = report as DroneReport;
-            SoldierReport soldierReport = report as SoldierReport;
+            RadarReport? radarReport = report as RadarReport;
+            SignalReport? signalReport = report as SignalReport;
+            DroneReport? droneReport = report as DroneReport;
+            SoldierReport? soldierReport = report as SoldierReport;
 
             bool hasCriticalKeywords = ContainsKeyword(report.Description,
                 WordToIdentify.missile.ToString(),

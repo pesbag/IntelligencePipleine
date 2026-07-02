@@ -10,12 +10,12 @@ abstract class Report
     private DateTime _timestamp;
     private double _latitude;
     private double _longitude;
-    private string _description;
+    private string _description = string.Empty;
     private ReportStatus _status;
     private Priority _priority;
     private Classification _classification;
     private int _reliabilityScore;
-    private string _rejectionReason;
+    private string _rejectionReason = string.Empty;
 
     private int _nextReportId;
 

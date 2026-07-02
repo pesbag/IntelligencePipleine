@@ -27,7 +27,7 @@ abstract class BaseValidator : IValidator
 			return ValidationResult.Failure($"Error: Longitude of report should be between{1} to {1}");
 		
 		if(string.IsNullOrEmpty(report.Description?.Trim()) || report.Description.Length>500 || report.Description.Length<10)
-			return ValidationResult.Failure($"Error: Description length should be between{1} to {1} characters and Description can not br null");
+			return ValidationResult.Failure($"Error: Description length should be between {10} to {500} characters and Description can not br null");
 		
 		return ValidationResult.Success();
 	}

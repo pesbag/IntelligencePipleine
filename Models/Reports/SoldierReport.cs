@@ -8,9 +8,9 @@ namespace IntelligencePipeline.Models.Reports;
 
 class SoldierReport:Report
 {
-    private string _soldierName;
-    private string _soldierID;
-    private string _unit;
+    private string _soldierName = string.Empty;
+    private string _soldierID = string.Empty;
+    private string _unit = string.Empty;
     private int _confidenceLevel;
     public string SoldierName {
         get { return _soldierName; }

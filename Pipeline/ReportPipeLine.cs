@@ -4,8 +4,6 @@ using IntelligencePipeline.Models.Enums;
 using IntelligencePipeline.Models.Reports;
 using IntelligencePipeline.Storage;
 using IntelligencePipeline.Validation;
-//using IntelligencePipeline.Storage;
-//using IntelligencePipeline.Validation;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,12 +14,12 @@ class ReportPipeline
 {
     private ReportRepository _validatedReports;
     private RejectedReportRepository _rejectedReports;
-    private int _nextReportId;
+    //private int _nextReportId;
 
     public ReportPipeline() {
         _validatedReports = new ReportRepository();
         _rejectedReports = new RejectedReportRepository();
-        _nextReportId = 1;
+        //_nextReportId = 1;
     }
     public void ProcessReport(Report report) {
         if (report == null) return;
@@ -46,7 +44,7 @@ class ReportPipeline
         Console.WriteLine($"Validated reports: {validCount}");
         Console.WriteLine($"Rejected reports: {rejectedCount}");
     }
-    private IValidator GetValidator(Report report) {
+    private IValidator? GetValidator(Report report) {
         if (report is SoldierReport)
             return new SoldierValidator();
         if (report is DroneReport)
@@ -60,7 +58,7 @@ class ReportPipeline
 
     private void ValidateReport(Report report) {
         report.Status = ReportStatus.Validating;
-        IValidator validator = GetValidator(report);
+        IValidator? validator = GetValidator(report);
         
         if (validator == null) {
             report.Status = ReportStatus.Rejected;
