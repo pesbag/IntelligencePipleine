@@ -20,25 +20,30 @@ class SoldierReport:Report
         get { return _soldierID; }
         protected set { _soldierID = value; }
     }
-    public string Unit { get; set; }
-    public int ConfidenceLevel { get; set; }
+    public string Unit {
+        get { return _unit; }
+        protected set { _unit = value; }
+    }
+    public int ConfidenceLevel {
+        get { return _confidenceLevel; }
+        protected set { _confidenceLevel = value; }
+    }
     public override string GetSourceType() => "Soldier";
 
-    //Description { weapon,vehicle,movement,explosion }
     public override int CalculateReliabilityScore()
     {
-        string weaponExists = $@"\b{WordToIdentify.weapon.ToString()}\b";
-        bool isWeaponExists = Regex.IsMatch(Description, weaponExists, RegexOptions.IgnoreCase);
-        string vehicleExists = $@"\b{WordToIdentify.vehicle.ToString()}\b";
-        bool isVehicleExists = Regex.IsMatch(Description, vehicleExists, RegexOptions.IgnoreCase);
-        string movementExists = $@"\b{WordToIdentify.movement.ToString()}\b";
-        bool isMovementExists = Regex.IsMatch(Description, movementExists, RegexOptions.IgnoreCase);
-        string explosionExists = $@"\b{WordToIdentify.explosion.ToString()}\b";
-        bool isExplosionExists = Regex.IsMatch(Description, explosionExists, RegexOptions.IgnoreCase);
+        string weaponKeyword = $@"\b{WordToIdentify.weapon.ToString()}\b";
+        bool hasWeaponKeyword = Regex.IsMatch(Description, weaponKeyword, RegexOptions.IgnoreCase);
+        string vehicleKeyword = $@"\b{WordToIdentify.vehicle.ToString()}\b";
+        bool hasVehicleKeyword = Regex.IsMatch(Description, vehicleKeyword, RegexOptions.IgnoreCase);
+        string movementKeyword = $@"\b{WordToIdentify.movement.ToString()}\b";
+        bool hasMovementKeyword = Regex.IsMatch(Description, movementKeyword, RegexOptions.IgnoreCase);
+        string explosionKeyword = $@"\b{WordToIdentify.explosion.ToString()}\b";
+        bool hasExplosionKeyword = Regex.IsMatch(Description, explosionKeyword, RegexOptions.IgnoreCase);
 
         int Base = 4;
         Base += ConfidenceLevel;
-        Base += (isWeaponExists ? 1 : 0) + (isVehicleExists ? 1 : 0) + (isMovementExists ? 1 : 0) + (isExplosionExists ? 1 : 0);
+        Base += (hasWeaponKeyword ? 1 : 0) + (hasVehicleKeyword ? 1 : 0) + (hasMovementKeyword ? 1 : 0) + (hasExplosionKeyword ? 1 : 0);
         return Base;
     }
 

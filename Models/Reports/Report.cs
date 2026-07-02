@@ -17,6 +17,13 @@ abstract class Report
     private int _reliabilityScore;
     private string _rejectionReason;
 
+    private int _nextReportId;
+
+    public int NextReportId
+    {
+        get { return _nextReportId; }
+        protected set { _nextReportId += 1; }
+    }
     public int ReportId { 
         get { return _reportId; }
         protected set { _reportId = value; }
@@ -30,8 +37,8 @@ abstract class Report
         protected set { _latitude = value; }
     }
     public double Longitude {
-        get { return _latitude; }
-        protected set { _latitude = value; }
+        get { return _longitude; }
+        protected set { _longitude = value; }
     }
     public string Description {
         get { return _description; }
@@ -39,23 +46,23 @@ abstract class Report
     }
     public ReportStatus Status {
         get { return _status; }
-        protected set { _status = value; }
+        set { _status = value; }
     }
     public Priority Priority { 
         get { return _priority; }
-        protected set { _priority = value; }
+        set { _priority = value; }
     }
     public Classification Classification {
         get { return _classification; }
-        protected set { _classification = value; }
+        set { _classification = value; }
     }
     public int ReliabilityScore {
         get { return _reliabilityScore; }
-        protected set { _reliabilityScore = value; }
+        set { _reliabilityScore = value; }
             }
     public string RejectionReason {
         get { return _rejectionReason; }
-        protected set { _rejectionReason = value; }
+        set { _rejectionReason = value; }
     }
 
     protected Report(int reportId, DateTime timestamp, double latitude, double longitude, string description)

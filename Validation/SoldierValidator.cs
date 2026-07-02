@@ -14,7 +14,7 @@ class SoldierValidator : BaseValidator
         if (soldierValidator.SoldierName.Length<2 || soldierValidator.SoldierName.Length>50) {
             return ValidationResult.Failure("Error: SoldierName is longer or shorter from the valid length. its should be between 2 to 50 characters{*}");
         }
-        if (soldierValidator.SoldierID.ToString().Length!=7) {
+        if (soldierValidator.SoldierID.Length!=7) {
             return ValidationResult.Failure("Error: SoldierID is longer or shorter from the valid length. its should be exectly 7 characters{*}");
         }
         if (soldierValidator.Unit.Length <2 || soldierValidator.Unit.Length>50)
