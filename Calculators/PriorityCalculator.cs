@@ -1,4 +1,5 @@
-﻿using IntelligencePipeline.Models.Enums;
+﻿using IntelligencePipeline.Configuration;
+using IntelligencePipeline.Models.Enums;
 using IntelligencePipeline.Models.Reports;
 using System;
 using System.Text.RegularExpressions;
@@ -22,7 +23,7 @@ namespace IntelligencePipeline.Calculators
                 WordToIdentify.attack.ToString(),
                 WordToIdentify.fire.ToString());
 
-            bool isCriticalRadarSpeed = radarReport != null && radarReport.Speed >= 800;
+            bool isCriticalRadarSpeed = radarReport != null && radarReport.Speed >= BusinessRules.Radar.criticalSpeedThreshold;
 
             bool isSignalWithTargetAndAttack = signalReport != null &&
                 ContainsKeyword(signalReport.Description, WordToIdentify.vehicle.ToString()) &&
@@ -38,11 +39,11 @@ namespace IntelligencePipeline.Calculators
                 WordToIdentify.suspicious.ToString(),
                 WordToIdentify.border.ToString());
 
-            bool isHighDroneAltitude = droneReport != null && droneReport.Altitude < 500;
-            bool isHighRadarSpeed = radarReport != null && radarReport.Speed >= 400;
+            bool isHighDroneAltitude = droneReport != null && droneReport.Altitude < BusinessRules.Drone.HighPriorityAltitudeThreshold;
+            bool isHighRadarSpeed = radarReport != null && radarReport.Speed >= BusinessRules.Radar.highSpeedThreshold;
 
             bool isHighSoldierMovement = soldierReport != null &&
-                soldierReport.ConfidenceLevel >= 4 &&
+                soldierReport.ConfidenceLevel >= BusinessRules.Soldier.HighConfidenceThreshold &&
                 ContainsKeyword(soldierReport.Description, WordToIdentify.movement.ToString());
 
             if (hasHighKeywords || isHighDroneAltitude || isHighRadarSpeed || isHighSoldierMovement)
@@ -55,8 +56,8 @@ namespace IntelligencePipeline.Calculators
                 WordToIdentify.vehicle.ToString(),
                 WordToIdentify.activity.ToString());
 
-            bool isMediumRadarSpeed = radarReport != null && radarReport.Speed >= 120;
-            bool isHighReliability = report.CalculateReliabilityScore() >= 7;
+            bool isMediumRadarSpeed = radarReport != null && radarReport.Speed >= BusinessRules.Radar.MediumSpeedThreshold;
+            bool isHighReliability = report.CalculateReliabilityScore() >= BusinessRules.Metrics.MediumPriorityReliabilityThreshold;
 
             if (hasMediumKeywords || isMediumRadarSpeed || isHighReliability)
             {

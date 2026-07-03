@@ -103,7 +103,7 @@ class ReportRepository
     }
     public int GetCountByStatus(ReportStatus status) {
         int countByStatus = 0;
-        for(int i=0; i< _reports.Count; i++)
+        for(int i=0; i < _reports.Count; i++)
         {
             if (_reports[i].Status == status)
             {

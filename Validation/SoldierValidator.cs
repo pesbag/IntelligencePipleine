@@ -1,4 +1,5 @@
-﻿using IntelligencePipeline.Models.Reports;
+﻿using IntelligencePipeline.Configuration;
+using IntelligencePipeline.Models.Reports;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,19 +12,19 @@ class SoldierValidator : BaseValidator
     if(report is not SoldierReport soldierValidator) {
             return ValidationResult.Failure("Error: this report is not soldier report");
         }
-        if (soldierValidator.SoldierName.Length<2 || soldierValidator.SoldierName.Length>50) {
-            return ValidationResult.Failure("Error: SoldierName is longer or shorter from the valid length. its should be between 2 to 50 characters{*}");
+        if (soldierValidator.SoldierName.Length< BusinessRules.Soldier.MinNameLength || soldierValidator.SoldierName.Length> BusinessRules.Soldier.MaxNameLength) {
+            return ValidationResult.Failure($"Error: SoldierName is longer or shorter from the valid length. its should be between {BusinessRules.Soldier.MinNameLength} to {BusinessRules.Soldier.MaxNameLength} characters");
         }
-        if (soldierValidator.SoldierID.Length!=7) {
-            return ValidationResult.Failure("Error: SoldierID is longer or shorter from the valid length. its should be exectly 7 characters{*}");
+        if (soldierValidator.SoldierID.Length!=BusinessRules.Soldier.IdRequiredLength) {
+            return ValidationResult.Failure("Error: SoldierID is longer or shorter from the valid length. its should be exectly {BusinessRules.Soldier.IdRequiredLength} characters");
         }
-        if (soldierValidator.Unit.Length <2 || soldierValidator.Unit.Length>50)
+        if (soldierValidator.Unit.Length < BusinessRules.Soldier.MinUnitLength || soldierValidator.Unit.Length> BusinessRules.Soldier.MaxUnitLength)
         {
-            return ValidationResult.Failure("Error: Unit is longer or shorter from the valid length. its should be between 2 to 50 characters{*}");
+            return ValidationResult.Failure($"Error: Unit is longer or shorter from the valid length. its should be between {BusinessRules.Soldier.MinUnitLength} to {BusinessRules.Soldier.MaxUnitLength} characters");
         }
-        if (soldierValidator.ConfidenceLevel<1 || soldierValidator.ConfidenceLevel > 5)
+        if (soldierValidator.ConfidenceLevel< BusinessRules.Soldier.MinConfidenceLevel || soldierValidator.ConfidenceLevel > BusinessRules.Soldier.MaxConfidenceLevel)
         {
-            return ValidationResult.Failure("Error: ConfidenceLevel is greater or less then the valid values. its should be in range 1 to 5{*}");
+            return ValidationResult.Failure($"Error: ConfidenceLevel is greater or less then the valid values. its should be in range of {BusinessRules.Soldier.MinConfidenceLevel} to {BusinessRules.Soldier.MaxConfidenceLevel}");
         }
         return ValidationResult.Success();
     }

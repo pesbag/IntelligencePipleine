@@ -1,3 +1,4 @@
+using IntelligencePipeline.Configuration;
 using IntelligencePipeline.Models.Reports;
 using System;
 using System.Collections;
@@ -13,21 +14,20 @@ abstract class BaseValidator : IValidator
 		return ValidateSpecificFields(report);
 	}
 	protected ValidationResult ValidateCommonFields(Report report) {
-		DateTime minDate = new DateTime(2020, 1, 1);
 		if (report.Timestamp.CompareTo(DateTime.Now)>0)
 			return ValidationResult.Failure("Error: time of report can not be in the future");
 		
-		if (report.Timestamp.CompareTo(minDate) < 0)
-			return ValidationResult.Failure($"Error: time of report can not be before {minDate}");
+		if (report.Timestamp.CompareTo(BusinessRules.baseValidator.MinValidDate) < 0)
+			return ValidationResult.Failure($"Error: time of report can not be before {BusinessRules.baseValidator.MinValidDate}");
 		
-		if (report.Latitude > 33.5000 || report.Latitude < 29.5000)
-			return ValidationResult.Failure($"Error: Latitude of report should be between{1} to {1}");
+		if (report.Latitude > BusinessRules.baseValidator.MaxLatitude || report.Latitude < BusinessRules.baseValidator.MinLatitude)
+			return ValidationResult.Failure($"Error: Latitude of report should be between {BusinessRules.baseValidator.MinLatitude} to {BusinessRules.baseValidator.MaxLatitude}");
 		
-		if(report.Longitude>36.0000 || report.Longitude<34.0000)
-			return ValidationResult.Failure($"Error: Longitude of report should be between{1} to {1}");
+		if(report.Longitude> BusinessRules.baseValidator.MaxLongitude || report.Longitude < BusinessRules.baseValidator.MinLongitude)
+			return ValidationResult.Failure($"Error: Longitude of report should be between {BusinessRules.baseValidator.MinLongitude} to {BusinessRules.baseValidator.MaxLongitude}");
 		
-		if(string.IsNullOrEmpty(report.Description?.Trim()) || report.Description.Length>500 || report.Description.Length<10)
-			return ValidationResult.Failure($"Error: Description length should be between {10} to {500} characters and Description can not br null");
+		if(string.IsNullOrEmpty(report.Description?.Trim()) || report.Description.Length > BusinessRules.baseValidator.MaxDescriptionLength || report.Description.Length < BusinessRules.baseValidator.MinDescriptionLength)
+			return ValidationResult.Failure($"Error: Description length should be between {BusinessRules.baseValidator.MinDescriptionLength} to {BusinessRules.baseValidator.MaxDescriptionLength} characters and Description can not br null");
 		
 		return ValidationResult.Success();
 	}

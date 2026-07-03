@@ -11,7 +11,7 @@ class ClassificationCalculator
 {
     public Classification Calculate(Report report)
     {
-        //if (report == null){return Classification.Unclassified;}
+        if (report == null){return Classification.Unclassified;}
 
         bool hasTopSecretKeywords = ContainsKeyword(report.Description, WordToIdentify.target.ToString(), WordToIdentify.attack.ToString(), WordToIdentify.missile.ToString());
         if (report.Priority == Priority.Critical || hasTopSecretKeywords)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IntelligencePipeline.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -24,18 +25,18 @@ class RadarReport:Report
 
     public override int CalculateReliabilityScore()
     {
-        int Base = 6;
-        if (Distance > 500 && Distance < 30000)
-            Base += 2;
-        if (Speed > 10 && Speed < 900)
-            Base += 1;
-        if (Distance > 70000)
-            Base -= 2;
-        if (Speed > 1500)
-            Base -= 2;
+        int Base = BusinessRules.Radar.BaseReliability;
+        if (Distance > BusinessRules.Radar.ReliabilityMinDistance && Distance < BusinessRules.Radar.ReliabilityMaxDistance)
+            Base += BusinessRules.Radar.ReliabilityDistanceBonus;
+        if (Speed > BusinessRules.Radar.ReliabilityMinSpeed && Speed < BusinessRules.Radar.ReliabilityMaxSpeed)
+            Base += BusinessRules.Radar.ReliabilitySpeedBonus;
+        if (Distance > BusinessRules.Radar.ExtremeDistanceThreshold)
+            Base -= BusinessRules.Radar.ExtremeDistancePenalty;
+        if (Speed > BusinessRules.Radar.ExtremeSpeedThreshold)
+            Base -= BusinessRules.Radar.ExtremeSpeedPenalty;
         return Base;
     }
-        
+
     public RadarReport(int reportId, DateTime timestamp, double latitude, double longitude, string description, int speed, int direction, int distance)
             : base(reportId, timestamp, latitude, longitude, description)
     {

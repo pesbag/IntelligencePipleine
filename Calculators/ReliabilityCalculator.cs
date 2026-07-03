@@ -1,4 +1,5 @@
-﻿using IntelligencePipeline.Models.Enums;
+﻿using IntelligencePipeline.Configuration;
+using IntelligencePipeline.Models.Enums;
 using IntelligencePipeline.Models.Reports;
 using System;
 using System.Collections.Generic;
@@ -10,17 +11,17 @@ class ReliabilityCalculator
     public int Calculate(Report report) 
     {
         int reliability=report.CalculateReliabilityScore();
-        if(reliability>=1 && reliability<=10)
+        if(reliability>= BusinessRules.baseValidator.MinReliabilityScore && reliability<= BusinessRules.baseValidator.MaxReliabilityScore)
             return reliability;
         
-        else if(reliability > 10)
+        else if(reliability > BusinessRules.baseValidator.MaxReliabilityScore)
         {
-            reliability = 10;
+            reliability = BusinessRules.baseValidator.MaxReliabilityScore;
         }
         
-        else if (reliability<1)
+        else if (reliability< BusinessRules.baseValidator.MinReliabilityScore)
         {
-            reliability =1;
+            reliability = BusinessRules.baseValidator.MinReliabilityScore;
         }
         return reliability;
     }

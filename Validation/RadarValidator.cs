@@ -1,4 +1,5 @@
-﻿using IntelligencePipeline.Models.Reports;
+﻿using IntelligencePipeline.Configuration;
+using IntelligencePipeline.Models.Reports;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,17 +13,17 @@ class RadarValidator: BaseValidator
         {
             return ValidationResult.Failure("Error: this report is not radar report");
         }
-        if(radarReport.Speed>2000 || radarReport.Speed<0)
+        if(radarReport.Speed> BusinessRules.Radar.MaxSpeed || radarReport.Speed< BusinessRules.Radar.MinSpeed)
         {
-            return ValidationResult.Failure("Error: the speed range should be in range of 0 to 2000 {*}");
+            return ValidationResult.Failure($"Error: the speed range should be in range of {BusinessRules.Radar.MinSpeed} to {BusinessRules.Radar.MaxSpeed}");
         }
-        if (radarReport.Direction > 360|| radarReport.Direction < 0)
+        if (radarReport.Direction > BusinessRules.Radar.MaxDirection || radarReport.Direction < BusinessRules.Radar.MinDirection)
         {
-            return ValidationResult.Failure("Error: the direction range should be in range of 0 to 360 {*}");
+            return ValidationResult.Failure($"Error: the direction range should be in range of {BusinessRules.Radar.MinDirection} to {BusinessRules.Radar.MaxDirection}");
         }
-        if (radarReport.Distance > 10000 || radarReport.Distance < 100)
+        if (radarReport.Distance > BusinessRules.Radar.MaxDistance || radarReport.Distance < BusinessRules.Radar.MinDistance)
         {
-            return ValidationResult.Failure("Error: the distance range should be in range of 100 to 10000 {*}");
+            return ValidationResult.Failure($"Error: the distance range should be in range of {BusinessRules.Radar.MinDistance} to {BusinessRules.Radar.MaxDistance}");
         }
         return ValidationResult.Success();
     }

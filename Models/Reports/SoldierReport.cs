@@ -1,8 +1,9 @@
-﻿using IntelligencePipeline.Models.Enums;
-using System.Text.RegularExpressions;
+﻿using IntelligencePipeline.Configuration;
+using IntelligencePipeline.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace IntelligencePipeline.Models.Reports;
 
@@ -41,7 +42,7 @@ class SoldierReport:Report
         string explosionKeyword = $@"\b{WordToIdentify.explosion.ToString()}\b";
         bool hasExplosionKeyword = Regex.IsMatch(Description, explosionKeyword, RegexOptions.IgnoreCase);
 
-        int Base = 4;
+        int Base = BusinessRules.Soldier.BaseReliability;
         Base += ConfidenceLevel;
         Base += (hasWeaponKeyword ? 1 : 0) + (hasVehicleKeyword ? 1 : 0) + (hasMovementKeyword ? 1 : 0) + (hasExplosionKeyword ? 1 : 0);
         return Base;

@@ -1,3 +1,4 @@
+using IntelligencePipeline.Configuration;
 using IntelligencePipeline.Models.Reports;
 using System;
 using System.Collections.Generic;
@@ -12,14 +13,14 @@ class DroneValidator:BaseValidator
         {
             return ValidationResult.Failure("Error: this report is not Drone report");
         }
-        if (droneReport.Altitude < 100 || droneReport.Altitude > 10000)
+        if (droneReport.Altitude < BusinessRules.Drone.MinAltitude || droneReport.Altitude > BusinessRules.Drone.MaxAltitude)
         {
-            return ValidationResult.Failure("Error: the altitude should be between 100 to 10000");
+            return ValidationResult.Failure($"Error: the altitude should be between {BusinessRules.Drone.MinAltitude} to {BusinessRules.Drone.MaxAltitude}");
         }
-        if (droneReport.ImageQuality < 1 || droneReport.ImageQuality > 100)
+        if (droneReport.ImageQuality < BusinessRules.Drone.MinImageQuality || droneReport.ImageQuality > BusinessRules.Drone.MaxImageQuality)
         {
-            return ValidationResult.Failure("Error: the quality of image should be between 1 to 100");
+            return ValidationResult.Failure($"Error: the quality of image should be between {BusinessRules.Drone.MinImageQuality } to {BusinessRules.Drone.MinImageQuality}");
         }
-        return ValidationResult.Success(); // DroneReport passd successfully
+        return ValidationResult.Success();
     }
 }

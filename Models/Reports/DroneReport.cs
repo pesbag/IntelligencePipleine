@@ -20,14 +20,14 @@ class DroneReport:Report
     public override int CalculateReliabilityScore()
     {
         int Base = BusinessRules.Drone.BaseReliability;
-        if (ImageQuality > 80)
-            Base += 3;
-        else if (ImageQuality > 50)
-            Base += 3;
-        if (Altitude > BusinessRules.Drone.ReliabilityExtremeAltitude)
-            Base -= 2;
-        if (Altitude > 500 && Altitude < 3000)
-            Base += 2;
+        if (ImageQuality > BusinessRules.Drone.HighImageQualityThreshold)
+            Base += BusinessRules.Drone.HighImageQualityBonus;
+        else if (ImageQuality >= BusinessRules.Drone.MediumImageQualityThreshold)
+            Base += BusinessRules.Drone.MediumImageQualityBonus;
+        if (Altitude > BusinessRules.Drone.ExtremeAltitudeThreshold)
+            Base -= BusinessRules.Drone.ExtremeAltitudePenalty;
+        if (Altitude > BusinessRules.Drone.ReliabilityMinAltitude && Altitude < BusinessRules.Drone.ReliabilityMaxAltitude)
+            Base += BusinessRules.Drone.ReliabilityAltitudeBonus;
         return Base;
     }
     public DroneReport(int reportId, DateTime timestamp, double latitude, double longitude, string description, int altitude, int imageQuality) : base(reportId, timestamp, latitude, longitude, description)
