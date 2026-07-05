@@ -15,20 +15,23 @@ abstract class BaseValidator : IValidator
 	}
 	protected ValidationResult ValidateCommonFields(Report report) {
 		if (report.Timestamp.CompareTo(DateTime.Now)>0)
-			return ValidationResult.Failure("Error: time of report can not be in the future");
+			return ValidationResult.Failure($"Invalid {nameof(report.Timestamp)}: cannot be in the future");
 		
-		if (report.Timestamp.CompareTo(BusinessRules.baseValidator.MinValidDate) < 0)
-			return ValidationResult.Failure($"Error: time of report can not be before {BusinessRules.baseValidator.MinValidDate}");
+		if (report.Timestamp < BusinessRules.baseValidator.MinValidDate)
+			return ValidationResult.Failure($"Invalid {nameof(report.Timestamp)}: must be between {BusinessRules.baseValidator.MinValidDate} and {DateTime.Now}");
 		
 		if (report.Latitude > BusinessRules.baseValidator.MaxLatitude || report.Latitude < BusinessRules.baseValidator.MinLatitude)
-			return ValidationResult.Failure($"Error: Latitude of report should be between {BusinessRules.baseValidator.MinLatitude} to {BusinessRules.baseValidator.MaxLatitude}");
+			return ValidationResult.Failure($"Invalid {nameof(report.Latitude)}: must be between {BusinessRules.baseValidator.MinLatitude} and {BusinessRules.baseValidator.MaxLatitude}");
 		
 		if(report.Longitude> BusinessRules.baseValidator.MaxLongitude || report.Longitude < BusinessRules.baseValidator.MinLongitude)
-			return ValidationResult.Failure($"Error: Longitude of report should be between {BusinessRules.baseValidator.MinLongitude} to {BusinessRules.baseValidator.MaxLongitude}");
+			return ValidationResult.Failure($"Invalid {nameof(report.Longitude)}: must be between {BusinessRules.baseValidator.MinLongitude} and {BusinessRules.baseValidator.MaxLongitude}");
+
+		if (string.IsNullOrWhiteSpace(report.Description))
+			return ValidationResult.Failure($"Missing required field: {nameof(report.Description)}");
 		
-		if(string.IsNullOrEmpty(report.Description?.Trim()) || report.Description.Length > BusinessRules.baseValidator.MaxDescriptionLength || report.Description.Length < BusinessRules.baseValidator.MinDescriptionLength)
-			return ValidationResult.Failure($"Error: Description length should be between {BusinessRules.baseValidator.MinDescriptionLength} to {BusinessRules.baseValidator.MaxDescriptionLength} characters and Description can not br null");
-		
+		if (report.Description.Length < BusinessRules.baseValidator.MinDescriptionLength || report.Description.Length > BusinessRules.baseValidator.MaxDescriptionLength)
+			return ValidationResult.Failure($"Invalid {nameof(report.Description)}: must be between {BusinessRules.baseValidator.MinDescriptionLength} and {BusinessRules.baseValidator.MaxDescriptionLength}");
+
 		return ValidationResult.Success();
 	}
 	protected abstract ValidationResult ValidateSpecificFields(Report report);

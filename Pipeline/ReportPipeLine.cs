@@ -14,16 +14,20 @@ class ReportPipeline
 {
     private ReportRepository _validatedReports;
     private RejectedReportRepository _rejectedReports;
-    //private int _nextReportId;
+    private int _nextReportId;
 
     public ReportPipeline() {
         _validatedReports = new ReportRepository();
         _rejectedReports = new RejectedReportRepository();
-        //_nextReportId = 1;
+        _nextReportId = 1;
     }
+
     public void ProcessReport(Report report) {
         if (report == null) return;
         report.Status = ReportStatus.New;
+        report.AssignId(_nextReportId);
+        _nextReportId+=1;
+        
         ValidateReport(report);
     }
 
@@ -47,12 +51,16 @@ class ReportPipeline
     private IValidator? GetValidator(Report report) {
         if (report is SoldierReport)
             return new SoldierValidator();
+        
         if (report is DroneReport)
             return new DroneValidator();
+        
         if (report is RadarReport)
             return new RadarValidator();
+        
         if (report is SignalReport)
             return new SignalValidator();
+        
         return null;
     }
 
@@ -85,6 +93,9 @@ class ReportPipeline
     private void CalculateMetrics(Report report) {
         report.CalculateReliabilityScore();
 
+        ReliabilityCalculator reliabilityObj = new ReliabilityCalculator();
+        report.ReliabilityScore = reliabilityObj.Calculate(report);
+
         PriorityCalculator priorityObj = new PriorityCalculator();
         report.Priority=priorityObj.Calculate(report);
 
@@ -93,15 +104,9 @@ class ReportPipeline
     }
 
     private void StoreReport(Report report) {
-        if (report.Status == ReportStatus.Validated) {
+        if (report.Status == ReportStatus.Validated)
             _validatedReports.Add(report);
-        }
         else
-        {
             _rejectedReports.Add(report);
-        }
     }
-
-
-
 }

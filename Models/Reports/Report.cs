@@ -17,12 +17,17 @@ abstract class Report
     private int _reliabilityScore;
     private string _rejectionReason = string.Empty;
 
-    private int _nextReportId;
+    //private int _nextReportId;
 
-    public int NextReportId
+    //public int NextReportId
+    //{
+    //    get { return _nextReportId; }
+    //    protected set { _nextReportId =value + 1; }
+    //}
+
+    public void AssignId(int id)
     {
-        get { return _nextReportId; }
-        protected set { _nextReportId += 1; }
+        ReportId = id;
     }
     public int ReportId { 
         get { return _reportId; }

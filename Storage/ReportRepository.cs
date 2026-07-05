@@ -22,12 +22,6 @@ class ReportRepository
 
     public List<Report> GetAll()
     {
-        //List<Report> reportList = new List<Report>();
-        //for(int report = 0; report < _reports.Count; report++)
-        //{
-        //    reportList.Add(_reports[report]);
-        //}
-        //return reportList;
         return _reports;
     }
 
@@ -45,7 +39,7 @@ class ReportRepository
 
     public List<Report> GetByPriority(Priority priority) {
         List<Report> reportPriorityList = new List<Report>();
-        for(int p =0; p< _reports.Count; p++)
+        for(int p = 0; p < _reports.Count; p++)
         {
             if (_reports[p].Priority == priority)
             {
@@ -55,14 +49,64 @@ class ReportRepository
         return reportPriorityList;
     }
 
+    public List<Report> SortByTimestamp()
+    {
+        return _reports.OrderByDescending(r => r.Timestamp).ToList();
+    }
+
+    public List<Report> SortByPriority()
+    {
+        return _reports.OrderByDescending(r => r.Priority).ToList();
+    }
+
+    public List<Report> SortByReliabilityScore()
+    {
+        return _reports.OrderByDescending(r => r.ReliabilityScore).ToList();
+    }
+
+    public List<Report> GetBySourceType(string source)
+    {
+        List<Report> reportSourceTypeList = new List<Report>();
+        for (int i = 0; i < _reports.Count; i++)
+        {
+            if (_reports[i].GetSourceType().ToLower() == source.ToLower())
+            {
+                reportSourceTypeList.Add(_reports[i]);
+            }
+        }
+        return reportSourceTypeList;
+    }
+
+    public List<Report> GetByDateRange(DateTime startDate, DateTime endDate)
+    {
+        List<Report> reportsInValueRange = new List<Report>();
+
+        for (int i = 0; i < _reports.Count; i++)
+            if (_reports[i].Timestamp >= startDate && _reports[i].Timestamp <= endDate)
+                reportsInValueRange.Add(_reports[i]);
+
+        return reportsInValueRange;
+    }
+    public List<Report> GetByClassification(Classification classification)
+    {
+        List<Report> reportPriorityList = new List<Report>();
+        for (int i = 0; i < _reports.Count; i++)
+        {
+            if (_reports[i].Classification == classification)
+            {
+                reportPriorityList.Add(_reports[i]);
+            }
+        }
+        return reportPriorityList;
+    }
+
     public List<Report> Search(string keyword) {
         List<Report> SearchKeyWord = new List<Report>();
         string findKeyword = $@"\b{keyword}\b";
-        //bool hasVehicleKeyword=false; 
         
         for (int i = 0; i < _reports.Count; i++)
         {
-            if (Regex.IsMatch(_reports[i].Description, findKeyword, RegexOptions.IgnoreCase))
+            if (!string.IsNullOrEmpty(_reports[i].Description) && Regex.IsMatch(_reports[i].Description, findKeyword, RegexOptions.IgnoreCase))
             {
                 SearchKeyWord.Add(_reports[i]);
             }
@@ -82,20 +126,20 @@ class ReportRepository
     }
 
     public void UpdateStatus(int reportId, ReportStatus newStatus) {
-        //if(newStatus!=)
         bool reportIdFound = false;
+        
         for(int i = 0; i < _reports.Count; i++)
         {
             if (_reports[i].ReportId == reportId)
             {
                 reportIdFound = true;
                 _reports[i].Status = newStatus;
+                break;
             }
         }
+        
         if (!reportIdFound)
-        {
-            Console.WriteLine("Error: reportId was not found, can not update the status");
-        }
+            Console.WriteLine($"Error:  reportId {reportId} was not found, can not update the status");
     }
 
     public int GetTotalCount() {

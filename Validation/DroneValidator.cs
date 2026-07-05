@@ -10,17 +10,14 @@ class DroneValidator:BaseValidator
     protected override ValidationResult ValidateSpecificFields(Report report)
     {
         if (report is not DroneReport droneReport)
-        {
-            return ValidationResult.Failure("Error: this report is not Drone report");
-        }
+            return ValidationResult.Failure($"Invalid {report.GetSourceType()}. Must be Drone");
+        
         if (droneReport.Altitude < BusinessRules.Drone.MinAltitude || droneReport.Altitude > BusinessRules.Drone.MaxAltitude)
-        {
-            return ValidationResult.Failure($"Error: the altitude should be between {BusinessRules.Drone.MinAltitude} to {BusinessRules.Drone.MaxAltitude}");
-        }
+            return ValidationResult.Failure($"Invalid {nameof(droneReport.Altitude)}: must be between {BusinessRules.Drone.MinAltitude} and {BusinessRules.Drone.MaxAltitude}");
+        
         if (droneReport.ImageQuality < BusinessRules.Drone.MinImageQuality || droneReport.ImageQuality > BusinessRules.Drone.MaxImageQuality)
-        {
-            return ValidationResult.Failure($"Error: the quality of image should be between {BusinessRules.Drone.MinImageQuality } to {BusinessRules.Drone.MinImageQuality}");
-        }
+            return ValidationResult.Failure($"Invalid {nameof(droneReport.ImageQuality)}: must be between {BusinessRules.Drone.MinImageQuality} and {BusinessRules.Drone.MaxImageQuality}");
+        
         return ValidationResult.Success();
     }
 }
