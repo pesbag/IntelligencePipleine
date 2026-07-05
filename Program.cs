@@ -21,7 +21,6 @@ class Program
         Console.WriteLine($"Priority: {report.Priority}");
         Console.WriteLine($"Classification: {report.Classification}");
         Console.WriteLine($"ReliabilityScore: {report.ReliabilityScore}");
-        Console.WriteLine($"RejectionReason: {report.RejectionReason}");
 
         if (report.Status == ReportStatus.Rejected && !string.IsNullOrEmpty(report.RejectionReason))
             Console.WriteLine($"Rejection Reason: {report.RejectionReason}");
@@ -276,14 +275,14 @@ class Program
     private static void DisplayReportsList(List<Report> reports)
     {
         if (reports.Count == 0)
-            Console.WriteLine("No reports found m");
+            Console.WriteLine("No reports found\n");
 
         for (int i = 0; i < reports.Count; i++)
             DisplayReport(reports[i]);
     }
     public static void searchByFreeText(ReportRepository repository) 
     {
-        string? stringToFind = getStringInput("enter text to find in reports description");
+        string? stringToFind = getStringInput("enter text to find in reports description\n");
         List<Report> listFound = repository.Search(stringToFind);
         DisplayReportsList(listFound);
     }
@@ -301,7 +300,7 @@ class Program
                           "enter 2 for Priority\n" +
                           "enter 3 for Classification\n" +
                           "enter 4 for Source Type (Drone, Radar, Signal, Soldier)\n" +
-                          "enter 5 for Date Range");
+                          "enter 5 for Date Range\n");
 
         int filterType = getIntNumberInput("Enter your choice:");
         Console.Clear();
@@ -425,119 +424,62 @@ class Program
 
     private static void injectionData()
     {
-        Console.WriteLine("Initializing pipeline with comprehensive test suite (8 reports)...\n");
+        Console.WriteLine("Initializing pipeline with 25 test reports (16 valid, 9 invalid)...\n");
 
-        // ==================== דוחות תקינים (יעברו ל-Validated) ====================
+        // ==================== דוחות תקינים (16 דוחות - יעברו ל-Validated) ====================
 
-        // 1. Drone - תקין, קריטי
-        DroneReport droneValid = new DroneReport(
-            reportId: 0, // מועבר ראשון בדיוק לפי חתימת הבנאי במפרט
-            timestamp: new DateTime(2026, 07, 01, 12, 00, 00),
-            latitude: 32.5000,
-            longitude: 34.8000,
-            description: "Drone visual confirmed immediate attack planned by enemy forces",
-            altitude: 450,
-            imageQuality: 90
-        );
+        // --- DRONE REPORTS (תקינים) ---
+        reportPipeline.ProcessReport(new DroneReport(0, new DateTime(2026, 01, 10, 08, 00, 00), 32.1000, 34.8000, "Drone spotted military truck movements along northern sector", 600, 85));
+        reportPipeline.ProcessReport(new DroneReport(0, new DateTime(2026, 02, 15, 14, 20, 00), 32.9000, 35.1000, "Drone confirmed critical attack launchpad setup in designated valley", 400, 95)); // Critical/TopSecret (גובה < 500 + מילת מפתח attack)
+        reportPipeline.ProcessReport(new DroneReport(0, new DateTime(2026, 03, 05, 19, 45, 00), 31.8000, 34.6000, "Thermal camera tracking suspicious cross-border activity under heavy fog", 1200, 60));
+        reportPipeline.ProcessReport(new DroneReport(0, new DateTime(2026, 04, 20, 04, 10, 00), 33.0000, 35.3000, "Aerial surveillance of known weapon storage warehouse showing low activity", 2500, 75)); // Secret (מילת מפתח weapon)
 
-        // 2. Radar - תקין, מהירות גבוהה מאוד (קריטי)
-        RadarReport radarValid = new RadarReport(
-            reportId: 0,
-            timestamp: new DateTime(2026, 07, 02, 08, 30, 00),
-            latitude: 33.1000,
-            longitude: 35.2000,
-            description: "Radar tracking fast object heading south rapidly",
-            speed: 850,
-            direction: 180,
-            distance: 12000
-        );
+        // --- RADAR REPORTS (תקינים) ---
+        reportPipeline.ProcessReport(new RadarReport(0, new DateTime(2026, 01, 12, 09, 15, 00), 32.2000, 34.9000, "Radar tracking low altitude flying object at stable pace", 300, 90, 15000));
+        reportPipeline.ProcessReport(new RadarReport(0, new DateTime(2026, 02, 18, 23, 10, 00), 33.2000, 35.4000, "Radar detected supersonic missile launch tracking south rapidly", 950, 180, 8000)); // Critical/TopSecret (מהירות >= 800 + מילת מפתח missile)
+        reportPipeline.ProcessReport(new RadarReport(0, new DateTime(2026, 03, 12, 11, 05, 00), 31.2000, 34.4000, "Radar scanning revealed suspicious fast vehicle convoy moving parallel to line", 420, 270, 35000)); // High/Secret (מהירות >= 400)
+        reportPipeline.ProcessReport(new RadarReport(0, new DateTime(2026, 04, 25, 16, 40, 00), 30.0000, 35.0000, "Routine radar sweep across coast showing normal maritime commerce lanes", 50, 0, 50000));
 
-        // 3. Signal - תקין, ערבית, עוצמה חזקה
-        SignalReport signalValid = new SignalReport(
-            reportId: 0,
-            timestamp: new DateTime(2026, 07, 03, 14, 15, 00),
-            latitude: 31.5000,
-            longitude: 34.5000,
-            description: "Routine transmission intercepted from active sector containing vehicle movements",
-            frequency: 433.92,
-            content: "Move the vehicle at midnight to the southern checkpoint",
-            language: Language.Arabic,
-            signalStrength: -30
-        );
+        // --- SIGNAL REPORTS (תקינים) ---
+        reportPipeline.ProcessReport(new SignalReport(0, new DateTime(2026, 01, 20, 13, 00, 00), 31.6000, 34.5000, "Intercepted transmission detailing border logistics and routine supply rotation", 145.2, "Supply trucks moving out tomorrow morning", Language.Arabic, -45)); // Secret (מקור Signal + מילת מפתח border)
+        reportPipeline.ProcessReport(new SignalReport(0, new DateTime(2026, 02, 22, 01, 55, 00), 32.5000, 35.0000, "High priority signal containing explicit attack commands and specific target coordinates", 880.0, "Initiate attack on the primary target immediately", Language.Arabic, -25)); // Critical/TopSecret (target AND attack)
+        reportPipeline.ProcessReport(new SignalReport(0, new DateTime(2026, 03, 18, 10, 30, 00), 32.8000, 35.2000, "Encrypted radio burst intercepted in foreign military language from deep outpost", 56.5, "Classified operational update transmitted to base", Language.Russian, -65)); // Secret (מקור Signal)
+        reportPipeline.ProcessReport(new SignalReport(0, new DateTime(2026, 05, 02, 18, 12, 00), 29.8000, 34.7000, "Low power signal tracking weapon distribution network across remote outposts", 120.8, "Weapon shipment delivered securely to cell", Language.English, -85)); // Secret (מקור Signal)
 
-        // 4. Soldier - תקין, רמת ביטחון נמוכה
-        SoldierReport soldierValid = new SoldierReport(
-            reportId: 0,
-            timestamp: new DateTime(2026, 07, 04, 22, 00, 00),
-            latitude: 29.9000,
-            longitude: 34.9000,
-            description: "Soldier reports routine patrol completed with no unusual activity",
-            soldierName: "Aviv Levi",
-            soldierID: "9876543",
-            unit: "Paratroopers",
-            confidenceLevel: 2
-        );
+        // --- SOLDIER REPORTS (תקינים) ---
+        reportPipeline.ProcessReport(new SoldierReport(0, new DateTime(2026, 01, 25, 07, 30, 00), 32.4000, 34.9000, "Observation post reports suspicious activity near perimeter fence lines", "Eitan Levi", "8765432", "Golani 13", 3)); // Restricted (מקור Soldier)
+        reportPipeline.ProcessReport(new SoldierReport(0, new DateTime(2026, 02, 28, 05, 45, 00), 33.1500, 35.2500, "Patrol encountered explosion heard from neighboring sector during night shift", "Dan Cohen", "7654321", "Paratroopers 890", 5)); // Critical/TopSecret (מילת מפתח explosion)
+        reportPipeline.ProcessReport(new SoldierReport(0, new DateTime(2026, 03, 24, 15, 50, 00), 31.9000, 34.7000, "Field intelligence reports major vehicle movement heading towards designated zone", "Omer Barak", "5432109", "Maglan", 4)); // High (רמת ביטחון >= 4 + תנועה)
+        reportPipeline.ProcessReport(new SoldierReport(0, new DateTime(2026, 05, 10, 21, 00, 00), 29.6000, 34.8000, "Soldier completed routine observation sweep with zero significant findings", "Yossi Amar", "3210987", "Givati 424", 2));
 
-        // ==================== דוחות לא תקינים (יידחו ל-Rejected) ====================
+        // ==================== דוחות לא תקינים (9 דוחות - יידחו ל-Rejected) ====================
 
-        // 5. Drone Invalid - נכשל: תיאור קצר מדי
-        DroneReport droneInvalid = new DroneReport(
-            reportId: 0,
-            timestamp: DateTime.Now,
-            latitude: 32.0000,
-            longitude: 34.5000,
-            description: "Too short",
-            altitude: 1500,
-            imageQuality: 75
-        );
+        // 17. Drone Invalid - נכשל ב-BaseValidator: תיאור קצר מדי 
+        reportPipeline.ProcessReport(new DroneReport(0, DateTime.Now, 32.0000, 34.5000, "Short", 1500, 75));
 
-        // 6. Radar Invalid - נכשל: כיוון לא חוקי
-        RadarReport radarInvalid = new RadarReport(
-            reportId: 0,
-            timestamp: DateTime.Now,
-            latitude: 31.0000,
-            longitude: 35.0000,
-            description: "Radar sweep showing ghost anomalies across sector",
-            speed: 250,
-            direction: 420,
-            distance: 25000
-        );
+        // 18. Drone Invalid - נכשל ב-DroneValidator: גובה נמוך מדי (פחות מ-100) 
+        reportPipeline.ProcessReport(new DroneReport(0, DateTime.Now, 32.1000, 34.6000, "Drone flying dangerously low to perform terrain analysis sweep", 50, 80));
 
-        // 7. Signal Invalid - נכשל: תאריך בעתיד
-        SignalReport signalInvalid = new SignalReport(
-            reportId: 0,
-            timestamp: DateTime.Now.AddDays(5),
-            latitude: 32.2000,
-            longitude: 35.5000,
-            description: "Encrypted burst transmission recorded from unidentified source",
-            frequency: 900.0,
-            content: "Secure message data burst",
-            language: Language.English,
-            signalStrength: -50
-        );
+        // 19. Radar Invalid - נכשל ב-RadarValidator: כיוון מעל 360 
+        reportPipeline.ProcessReport(new RadarReport(0, DateTime.Now, 31.5000, 35.0000, "Radar detecting ghost signals in extreme wide angle coverage", 200, 450, 15000));
 
-        // 8. Soldier Invalid - נכשל: מזהה חייל לא תקין
-        SoldierReport soldierInvalid = new SoldierReport(
-            reportId: 0,
-            timestamp: DateTime.Now,
-            latitude: 30.5000,
-            longitude: 34.2000,
-            description: "Observation post reporting suspicious dust cloud in valley",
-            soldierName: "Dan Cohen",
-            soldierID: "12345",
-            unit: "Givati",
-            confidenceLevel: 3
-        );
+        // 20. Radar Invalid - נכשל ב-BaseValidator: קו רוחב (Latitude) מחוץ לישראל 
+        reportPipeline.ProcessReport(new RadarReport(0, DateTime.Now, 45.0000, 35.0000, "Radar station checking outer atmospheric track records", 150, 120, 90000));
 
-        // הזרקה לצינור לעיבוד אוטומטי
-        reportPipeline.ProcessReport(droneValid);
-        reportPipeline.ProcessReport(radarValid);
-        reportPipeline.ProcessReport(signalValid);
-        reportPipeline.ProcessReport(soldierValid);
-        reportPipeline.ProcessReport(droneInvalid);
-        reportPipeline.ProcessReport(radarInvalid);
-        reportPipeline.ProcessReport(signalInvalid);
-        reportPipeline.ProcessReport(soldierInvalid);
+        // 21. Signal Invalid - נכשל ב-BaseValidator: תאריך בעתיד 
+        reportPipeline.ProcessReport(new SignalReport(0, DateTime.Now.AddMonths(1), 32.2000, 35.2000, "Future transmission intercepted by predictive hardware cluster", 450.0, "Future test", Language.Hebrew, -40));
+
+        // 22. Signal Invalid - נכשל ב-SignalValidator: עוצמת אות חלשה מדי (מתחת ל-120-) 
+        reportPipeline.ProcessReport(new SignalReport(0, DateTime.Now, 32.3000, 35.3000, "Faint background noise recorded from deep desert communications channel", 90.5, "Static noise", Language.Other, -150));
+
+        // 23. Soldier Invalid - נכשל ב-SoldierValidator: מזהה חייל אינו 7 ספרות 
+        reportPipeline.ProcessReport(new SoldierReport(0, DateTime.Now, 30.5000, 34.5000, "Soldier reported seeing flashes over the ridge lines", "Gad Levi", "123", "Reserves", 3));
+
+        // 24. Soldier Invalid - נכשל ב-SoldierValidator: רמת ביטחון מחוץ לטווח (6) 
+        reportPipeline.ProcessReport(new SoldierReport(0, DateTime.Now, 30.6000, 34.6000, "Soldier claims absolute certainty regarding armor movements near valley", "Avi Ran", "1112223", "Armor 7", 6));
+
+        // 25. Any Type Invalid - נכשל ב-BaseValidator: תיאור ארוך מדי (מעל 500 תווים) 
+        reportPipeline.ProcessReport(new SoldierReport(0, DateTime.Now, 30.0000, 34.5000, new string('A', 550), "Test Name", "1234567", "Test Unit", 3));
     }
     public static void showSingleReport(ReportRepository repository) 
     {

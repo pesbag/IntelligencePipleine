@@ -17,14 +17,6 @@ abstract class Report
     private int _reliabilityScore;
     private string _rejectionReason = string.Empty;
 
-    //private int _nextReportId;
-
-    //public int NextReportId
-    //{
-    //    get { return _nextReportId; }
-    //    protected set { _nextReportId =value + 1; }
-    //}
-
     public void AssignId(int id)
     {
         ReportId = id;
